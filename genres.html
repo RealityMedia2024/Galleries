@@ -31,7 +31,7 @@
   <script src="https://supereggbert.github.io/aframe-htmlembed-component/dist/build.js"></script>   
 
 
-  <title>Reality Media - What are reality media</title>
+  <title>Reality Media - Genres</title>
   <meta property="og:title" content="Reality Media" />
   <link rel="stylesheet" href="style.css">
 </head>
@@ -51,8 +51,16 @@
   >
 <!--#region preloading assets  -->
     <a-assets>
+      <!-- buildings -->
+      <a-asset-item id="building-ceiling-glb" src="assets/Ch6-Genres/artGallery-modular_lobby_ceiling.glb"></a-asset-item>
+      <a-asset-item id="building-lightnorth-glb" src="assets/Ch6-Genres/artGallery-modular_lobby_trackLighting-north.glb"></a-asset-item>
+      <a-asset-item id="building-light-glb" src="assets/Ch6-Genres/artGallery-modular_lobby_trackLighting.glb"></a-asset-item>
+      <a-asset-item id="building-door-glb" src="assets/Ch6-Genres/artGallery-modular_west_white_long.glb"></a-asset-item>
+      <a-asset-item id="building-west-glb" src="assets/Ch6-Genres/artGallery-modular_west_white_long_door.glb"></a-asset-item>
+      <a-asset-item id="building-main-glb" src="assets/Ch6-Genres/artGallery-modular_white.glb"></a-asset-item>
+
+
       
-      <a-asset-item id="building-glb" src="assets/Ch1-What-are/What-is-Reality-Media.glb"></a-asset-item>
       <a-asset-item id="navmesh-glb" src="assets/Ch1-What-are/What-is-Reality-Media-navmesh.glb"></a-asset-item>
       <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
@@ -181,11 +189,13 @@
     <!-- ####################   -->
     <!--ADDING 3D OBJECTS TO THE SCENE  -->
       <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model> 
-      <a-gltf-model src="#building-glb"
-        id="building"
-        
-      ></a-gltf-model>
-    </a-entity> 
+      <a-gltf-model src="#building-main-glb"id="building" ></a-gltf-model>
+      <a-gltf-model src="#building-light-glb"id="building" ></a-gltf-model>
+      <a-gltf-model src="#building-west-glb"id="building" ></a-gltf-model>
+      <a-gltf-model src="#building-lightnorth-glb"id="building" ></a-gltf-model>
+      <a-gltf-model src="#building-door-glb"id="building" ></a-gltf-model>
+      <a-gltf-model src="#building-ceiling-glb"id="building" ></a-gltf-model>
+
 
     <a-sphere color="black" radius="0.005" id="cursor" material="shader:flat" visible="false"></a-sphere>
 
@@ -304,13 +314,15 @@
 
   <div id="dom-overlay">
     <h1>
-      What are Reality Media?
+      Genres
     </h1>
     <div class="overlay-footer">
       <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
         <h2>Settings</h2>
           
         <!-- <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button> -->
+
+
         <button onclick="console.log('hello')" style="display: block;" class="collapsible_test">View Map</button>
         <div class="collapsible_content">
           <p>Lorem ipsum...</p>
