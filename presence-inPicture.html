@@ -13,24 +13,108 @@
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/components/sphere-collider.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/dist/physx.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls@0.4.3/dist/aframe-blink-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/handy-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/magnet-helpers.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aframe-htmlmesh@2.2.0/build/aframe-html.min.js"></script>
+
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
   <script src="model-utils.js"></script>
   <!--#endregion -->
-  
+
   <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+
   <script src="navigation.js"></script>
 
-  <title>RealityMedia - Onboarding Room</title>
-  <meta property="og:title" content="Reality Media - Onboarding" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <link rel="stylesheet" href="https://example.com/styles.css" crossorigin="anonymous">
+  <!-- Embed html -->
+
+
+  <title>Reality Media - Presence and Aura</title>
+  <meta property="og:title" content="Reality Media" />
   <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* A-Frame 씬의 크기를 중앙의 작은 상자로 제한 */
+    #aframe-container {
+      width: 50vw;
+      float: right;
+      height: 50vh;
+      margin-top:10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .floatleft{
+      float: left;
+      width: 45vw;
+    }
+
+    /* 전체 화면 버튼 */
+    #fullscreen-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      z-index: 10;
+    }
+
+    #fullscreen-btn:hover {
+      background: rgba(0, 0, 0, 1);
+    }
+  </style>
 </head>
 
 <body>
-  <a-scene
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+    <a href="#home" class="w3-bar-item w3-button"><b>RealityMedia</b></a>
+    <!-- Float links to the right. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="#chapters" class="w3-bar-item w3-button">Galleries</a>
+      <a href="#about" class="w3-bar-item w3-button">About</a>
+      <a href="#contact" class="w3-bar-item w3-button">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+  <img class="w3-image" src="assets/General/book-cover.jpg" alt="Splash" style="width: 100%;height: 400px">
+  <div class="w3-display-middle w3-margin-top w3-center">
+    <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>RealityMedia</b></span></h1>
+  </div>
+</header>
+
+<div class="w3-content w3-padding" style="max-width:1564px">
+    <!-- Precis Section -->
+    <div class="w3-container floatleft" id="teaser">
+      <p>
+        <i>Reality Media</i> is a book about augmented reality (AR) and virtual reality (VR) technologies and their impact on media and society. The book is published by MIT Press and is available in print and digital formats. The authors are David Bolter, Maria Engberg, and Blair MacIntyre.
+      <p>
+        This digital version of <i>Reality Media</i> is a complement to the printed book (shown above). The digital version has both 2D and 3D forms.
+        The 2D and 3D sites are organized as a collection of galleries; in the 2D site these are pages, and in the 3D site they are 3D spaces that allow you to get inside AR and VR—to inhabit these new reality media. Each of the 2D pages has a corresponding immersive 3D gallery space.
+      </p>
+      <p>
+         The Preface explains the concept behind the project and gives an overview of the structure of the 2D and 3D spaces, and how they relate to the chapters in the printed book.
+      </p>
+    </div>
+    
+  <div id="aframe-container">
+ 
+    <a-scene embedded
     physx="autoLoad: true; delay: 1000; wasmUrl: https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/wasm/physx.release.wasm; useDefaultScene: false;"
     webxr="overlayElement:#dom-overlay;"
     background="color:skyblue;"
@@ -338,85 +422,28 @@
         scale="2.06 1.49 1.7"
         material=""
       ></a-plane>
-
-
-
   </a-scene>
+</div>
 
-
+<div class="w3-container" id="teaser">
+  <p>
+    The immersive galleries of RealityMedia are organized around a central rotunda. The rotunda contains an overview of each immersive gallery along with a portal to each gallery. The rotunda serves as an organizational hub and can be accessed from each of the immersive galleries.
+  </p>
+  <p>
+    Links to the 2D galleries of RealityMedia are listed below. These pages provide context for your visit as well as links into the corresponding 3D galleries (the portal symbol indicates a link into a 3D gallery).
+  </p>
+</div>
 
   <!-- ####################   -->
   <!-- ####### UI #########   -->
   <!-- ####################   -->
 
-  <div id="dom-overlay">
-    <h1 id="Room_title">
-      Onboarding Room
-    </h1>
-    <!-- <div class="overlay-footer">
-      <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
-        <h2>Settings</h2>
-        <fieldset style="border:none;">
-          <legend>Thumbstick Behaviour</legend>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport" checked><label for="thumbstick-teleport"> Teleport</label>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move"><label for="thumbstick-move"> Move</label>
-          <legend><a href="onboarding.html">Navigate to onboarding</a></legend> 
-        </fieldset>
-        <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
-      </section> -->
-      
-      <!-- HTML form logic -->
-      <script>
-       
-      </script>
-      <!-- <div id="dom-overlay-message">Enter AR or VR to start.</div> -->
-    </div>
-  </div>
+  
   <a href="https://sites.gatech.edu/augmentedenvironments/" target="_blank">
     <img src="assets/General/AEL_logo.png" class="AEL_Logo"></img>
   </a>
- 
-  <script>
-    // Continuous position check
-    setInterval(function () {
-      var userPosition = document
-        .getElementById("cameraRig")
-        .getAttribute("position");
-      if ((userPosition.z <= -7 && userPosition.z > -9)&& (userPosition.x <= 56 && userPosition.x > 54)) {
-      //back to onboarding:  Move the user to a new position
-      document
-          .getElementById("cameraRig")
-          .setAttribute("position", "0 0 0");
-        document.getElementById("cameraRig").setAttribute("rotation", "0 0 0");
-     }
-      if (userPosition.z <= -13) {
-        // In the onbording: Move the user to a new position
-        document
-          .getElementById("cameraRig")
-          .setAttribute("position", "52.320 3 -8.300");
-        document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
-       
-        // window.open("presence.html", "_blank");
-      }
-      
-      if ((userPosition.z <= -1.4 && userPosition.z > -1.5)&& (userPosition.x <= 52 && userPosition.x > 51.4)) {
-        // what are: 
-        document
-          .getElementById("cameraRig")
-          .setAttribute("position", "52.320 3 -8.300");
-        document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
-      }
-      if((userPosition.z <= -8.4&& userPosition.z > -8.5)&& (userPosition.x <= 36 && userPosition.x > 35)){
-        // presence & aura
-        // document
-        //   .getElementById("cameraRig")
-        //   .setAttribute("position", "52.320 3 -8.300");
-        // document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
-        document.getElementById("mainScene").setAttribute("src", "#presence_scene");
-      }
-    }, 100);
-  </script>
-
+</div>
+  <script src="navigation.js"></script>
 </body>
 
 </html>

@@ -80,14 +80,14 @@ scene.lightOn = function() {
   scene.setAttribute('animation__fogback', "property: fog.color; to: #dbdedb; dur: 800");
 }
 // Play button action
-document.querySelector('#control-play').addEventListener('click', function () {
-  if (videoPlayer.paused) {
-    scene.lightOn()
-  } else {
-    scene.lightOff();
-    hideCursor();
-  }
-});
+// document.querySelector('#control-play').addEventListener('click', function () {
+//   if (videoPlayer.paused) {
+//     scene.lightOn()
+//   } else {
+//     scene.lightOff();
+//     hideCursor();
+//   }
+// });
 
 //   AFRAME.registerComponent('play-on-click', {
 //   init: function () {
