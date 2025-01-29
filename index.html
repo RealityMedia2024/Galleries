@@ -141,7 +141,7 @@
 
   
   <a-entity id="MitPress" position="-4.79101 2 -9.076" rotation="0 90 0">
-    <a-image id="MitPress_book" src="assets/Onboarding/realityMediaBook.jpg" material="" geometry="height: 2; width: 1.5" position="0 -0.34161 0"></a-image>
+    <a-image id="MitPress_book" src="assets/Onboarding/realityMediaBook.jpg" material="" geometry="height: 2; width: 1.5" position="0 -0.34161 0.003"></a-image>
    
       <a-entity  position="0.86611 0.2 0" text="color: white; align: left; letterSpacing: 5; lineHeight: 55; 
       value: Published by MIT Press;
@@ -204,6 +204,25 @@
     geometry=""
     scale="1.42 2.01 1.42"
   ></a-plane>
+
+  <!-- 1st teleportzone: onboarding -> rotunda  -->
+  <a-box id="teleportBox1" position="-0.414 0.90754 -14.14166" depth="1" height="1" width="1" color="red" opacity="0" teleport-zone destination="destination1"></a-box>
+
+  <a-box id="destination1" position="51.35808 2.42746 -9.00596" depth="1" height="1" width="1" color="blue" opacity="0"></a-box>
+
+
+  <!-- 2nd teleportzone: rotunda -> onboarding  -->
+<a-box id="teleportBox2" position="55.2214 2.42746 -9.00596"depth="1" height="1" width="1" color="green" teleport-zone destination="destination2" opacity="0"></a-box>
+
+
+  <a-box id="destination2" position="0 0.5 -3" rotation="0 0 0" depth="1" height="1" width="1" color="yellow" opacity="0"></a-box>
+
+  <!-- 3rd teleportzone: rotunda -> presence  -->
+  <a-box id="teleportBox3" position="35.22043 3.507 -8.509" depth="1" height="1" width="1" color="green" teleport-zone destination="destination3" opacity="0"></a-box>
+
+
+  <a-box id="destination3" position="-0.39433 0.5 -6" depth="1" height="1" width="1" color="yellow" opacity="0"></a-box> 
+
 
       <!--Rotunda -->
       <!-- <a-video
@@ -377,44 +396,47 @@
   </a>
  
   <script>
-    // Continuous position check
-    setInterval(function () {
-      var userPosition = document
-        .getElementById("cameraRig")
-        .getAttribute("position");
-      if ((userPosition.z <= -7 && userPosition.z > -9)&& (userPosition.x <= 56 && userPosition.x > 54)) {
-      //back to onboarding:  Move the user to a new position
-      document
-          .getElementById("cameraRig")
-          .setAttribute("position", "0 0 0");
-        document.getElementById("cameraRig").setAttribute("rotation", "0 0 0");
-     }
-      if (userPosition.z <= -13) {
-        // In the onbording: Move the user to a new position
-        document
-          .getElementById("cameraRig")
-          .setAttribute("position", "52.320 3 -8.300");
-        document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
-       
-        // window.open("presence.html", "_blank");
-      }
-      
-      if ((userPosition.z <= -1.4 && userPosition.z > -1.5)&& (userPosition.x <= 52 && userPosition.x > 51.4)) {
-        // what are: 
-        document
-          .getElementById("cameraRig")
-          .setAttribute("position", "52.320 3 -8.300");
-        document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
-      }
-      if((userPosition.z <= -8.4&& userPosition.z > -8.5)&& (userPosition.x <= 36 && userPosition.x > 35)){
-        // presence & aura
-        // document
-        //   .getElementById("cameraRig")
-        //   .setAttribute("position", "52.320 3 -8.300");
-        // document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
-        document.getElementById("mainScene").setAttribute("src", "#presence_scene");
-      }
-    }, 100);
+   AFRAME.registerComponent("teleport-zone", {
+        tick: function () {
+          let player = document.getElementById("cameraRig");
+          let playerPos = player.getAttribute("position");
+
+          // get teleportation box positions
+          let zoneCenter = this.el.getAttribute("position");
+          
+          // destination ID
+          let destinationId = this.el.getAttribute("destination");
+          let destinationBox = document.getElementById(destinationId);
+
+          if (!destinationBox) {
+            console.warn(`Can't find (${destinationId})`);
+            return; 
+          }
+
+          let destinationPos = destinationBox.getAttribute("position");
+
+          if (!destinationPos) {
+            console.warn(`Can't find(${destinationId})`);
+            return; 
+          }
+
+          let range = 1.0; 
+
+          let distance = Math.sqrt(
+            Math.pow(playerPos.x - zoneCenter.x, 2) +
+            Math.pow(playerPos.y - zoneCenter.y, 2) +
+            Math.pow(playerPos.z - zoneCenter.z, 2)
+          );
+
+
+          if (distance < range) {
+            console.log("텔레포트 발동!");
+            player.setAttribute("position", destinationPos); 
+          }
+        }
+      });
+
+
   </script>
 
 </body>
