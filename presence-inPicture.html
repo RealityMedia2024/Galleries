@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!--#region AFrame library and 3rd party components  -->
+   <!-- <script>
+    // WebXR requires https: to work so ensure redirected if needed.
+    if (location.hostname !== 'localhost' && window.location.protocol === 'http:') window.location.protocol = 'https:';
+  </script> -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe-master.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.4/dist/aframe-environment-component.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/components/sphere-collider.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/dist/physx.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls@0.4.3/dist/aframe-blink-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/handy-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/magnet-helpers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-htmlmesh@2.2.0/build/aframe-html.min.js"></script>
+
+  <script src="ar-shadow-helper.js"></script>
+  <script src="ar-cursor.js"></script>
+  <script src="simple-navmesh-constraint.js"></script>
+  <script src="model-utils.js"></script>
+  <!--#endregion -->
+
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+
+  <script src="navigation.js"></script>
+
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <link rel="stylesheet" href="https://example.com/styles.css" crossorigin="anonymous">
+  <!-- Embed html -->
+
+
+  <title>Reality Media - Presence and Aura</title>
+  <meta property="og:title" content="Reality Media" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* A-Frame 씬의 크기를 중앙의 작은 상자로 제한 */
+    #aframe-container {
+      width: 50vw;
+      float: right;
+      height: 50vh;
+      margin-top:10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .floatleft{
+      float: left;
+      width: 45vw;
+    }
+
+    /* 전체 화면 버튼 */
+    #fullscreen-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      z-index: 10;
+    }
+
+    #fullscreen-btn:hover {
+      background: rgba(0, 0, 0, 1);
+    }
+  </style>
+</head>
+
+<body>
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+    <a href="#home" class="w3-bar-item w3-button"><b>RealityMedia</b></a>
+    <!-- Float links to the right. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="#chapters" class="w3-bar-item w3-button">Galleries</a>
+      <a href="#about" class="w3-bar-item w3-button">About</a>
+      <a href="#contact" class="w3-bar-item w3-button">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+  <img class="w3-image" src="assets/General/book-cover.jpg" alt="Splash" style="width: 100%;height: 400px">
+  <div class="w3-display-middle w3-margin-top w3-center">
+    <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>RealityMedia</b></span></h1>
+  </div>
+</header>
+
+<div class="w3-content w3-padding" style="max-width:1564px">
+    <!-- Precis Section -->
+    <div class="w3-container floatleft" id="teaser">
+      <p>
+        <i>Reality Media</i> is a book about augmented reality (AR) and virtual reality (VR) technologies and their impact on media and society. The book is published by MIT Press and is available in print and digital formats. The authors are David Bolter, Maria Engberg, and Blair MacIntyre.
+      <p>
+        This digital version of <i>Reality Media</i> is a complement to the printed book (shown above). The digital version has both 2D and 3D forms.
+        The 2D and 3D sites are organized as a collection of galleries; in the 2D site these are pages, and in the 3D site they are 3D spaces that allow you to get inside AR and VR—to inhabit these new reality media. Each of the 2D pages has a corresponding immersive 3D gallery space.
+      </p>
+      <p>
+         The Preface explains the concept behind the project and gives an overview of the structure of the 2D and 3D spaces, and how they relate to the chapters in the printed book.
+      </p>
+    </div>
+    
+  <div id="aframe-container">
+ 
+    <a-scene embedded
+    physx="autoLoad: true; delay: 1000; wasmUrl: https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/wasm/physx.release.wasm; useDefaultScene: false;"
+    webxr="overlayElement:#dom-overlay;"
+    background="color:skyblue;"
+    reflection="directionalLight:#dirlight;"
+    renderer="alpha:true;physicallyCorrectLights:true;colorManagement:true;exposure:1;toneMapping:ACESFilmic;"
+    ar-hit-test="target:#my-ar-objects;type:footprint;footprintDepth:0.2;"
+    shadow="type: pcfsoft"
+    ar-cursor raycaster="objects: #my-ar-objects a-sphere .collidable"
+    xr-mode-ui="XRMode:xr"
+    id="mainScene"
+  >
+<!--#region preloading assets  -->
+    <a-assets>
+        <a-asset-item id="onboarding" src="assets/Onboarding/onboarding_fixed.glb"></a-asset-item>
+        <a-asset-item id="book" src="assets/Onboarding/book_anim.glb"></a-asset-item>
+        <image id="map" src="assets/Onboarding/Map_arrival.png">
+        <image id="placeholder"src="assets/Onboarding/placeholder.jpg">
+
+        <!-- Rotunda Chapter images -->
+        <image id="chap_01"src="assets/Onboarding/image_01.jpg">
+        <image id="chap_02"src="assets/Onboarding/image_02.jpg">
+        <image id="chap_03"src="assets/Onboarding/image_03.jpg">
+        <image id="chap_04"src="assets/Onboarding/image_04.jpg">
+        <image id="chap_05"src="assets/Onboarding/image_05.jpg">
+        <image id="chap_06"src="assets/Onboarding/image_06.jpg">
+        <image id="chap_07"src="assets/Onboarding/image_07.jpg">
+        
+        <image id="portal_temp"src="assets/General/temp.jpg">
+
+   
+          <!-- scenes -->
+          <a-asset-item id="presence_scene" src="presence.html"></a-asset-item>
+
+
+      <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
+      <a-mixin id="blink" blink-controls="rotateOnTeleport:false;cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
+
+      <!-- videos -->
+      <video id="seeitnow_vid" loop="true" src="assets/Ch1-What-are/seeitnow.mp4"></video>
+
+     
+    </a-assets>
+  <!--#endregion   -->
+
+      <!-- camera -->
+    <a-entity
+      id="cameraRig"
+      simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:0;exclude:.navmesh-hole;"
+      movement-controls="speed:0.15;camera:#head;"
+      position="0 0 0" origin-on-ar-start>
+      
+      <a-entity id="head"
+        camera="near:0.01;"
+        look-controls="pointerLockEnabled: false"
+        position="0 1.65 0"></a-entity>
+   
+    </a-entity>
+     
+    <!-- ####################   -->
+    <!-- ####################   -->
+    <!--ADDING 3D OBJECTS TO THE SCENE  -->
+      <!-- <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>  -->
+      <a-gltf-model src="#onboarding" id="onboarding"position="-26.5 0 -9"></a-gltf-model>
+    </a-entity> 
+
+    <a-sphere color="black" radius="0.005" id="cursor" material="shader:flat" visible="false"></a-sphere>
+
+
+    <!-- ####################   -->
+    <!-- ###### TEXTS #######   -->
+    <!-- ####################   -->
+
+    <a-plane
+        src="#map"
+        position="-3.148 1.57594 -14"
+        height="1.5"
+        width="1.5"
+        scale="1.5 1.5 1.5"
+        material="alphaTest: 0.001"
+      ></a-plane>
+
+      <a-entity
+        text="value: Please Stand on the podium"
+        position="-2.28098 0.00601 -2.73361"
+        scale="3 3 3"
+        rotation="-90 -90 180"
+      ></a-entity>
+
+      
+      <a-entity id="welcome_txt" position="-4.79101 2.1 -0.417" rotation="0 90 0">
+        <a-entity position="0 0.2 0" text="color: white; align: center; letterSpacing: 5; lineHeight: 55; 
+        value: Welcome to Reality Media; 
+        baseline: top; width: 3; anchor: left; wrapCount: 55;">
+        </a-entity>
+        <a-entity  text="color: white; letterSpacing: 5; baseline: top; lineHeight: 55; 
+        value: Reality Media is a project encompassing three writing spaces, three technologies for representing ideas: print, the web, and immersive VR. The printed page is a writing space with a tradition dating back to the fifteenth century (in Europe, much earlier in China). Obviously the web has a far shorter tradition, beginning around 1990. But in the thirty year since Tim Berners-Lee launched the first web server, the web has grown to rival print for many kinds of communication. The technologies for creating 3D graphic spaces in VR (and AR) actually predate the web. But only in the past 10 years have AR and VR become widely available media. The goal of RealityMedia is to demonstrate the potential range of AR and VR as communicative forms.; 
+        width: 3; anchor: left; wrapCount: 65;">
+        </a-entity>
+    </a-entity>
+
+    <a-entity id="Overview" position="-4.79101 2.1 -4.386" rotation="0 90 0">
+     
+      <a-entity  text="color: white; letterSpacing: 5; baseline: top; lineHeight: 55; 
+      value: Each gallery in this “immersive book” corresponds to one or more chapters in the printed book and illustrates the themes of the printed chapter(s). (See the map on the far wall for the names/themes of the galleries.) For example, the gallery entitled “Presence” illustrates both presence and the related concept of aura and how computer scientists as well as filmmakers and designers have tried to evoke these reactions in visitors to their immersive applications.; 
+      width: 3; anchor: left; wrapCount: 65">
+      </a-entity>
+  </a-entity>
+
+  
+  <a-entity id="MitPress" position="-4.79101 2 -9.076" rotation="0 90 0">
+    <a-image id="MitPress_book" src="assets/Onboarding/realityMediaBook.jpg" material="" geometry="height: 2; width: 1.5" position="0 -0.34161 0"></a-image>
+   
+      <a-entity  position="0.86611 0.2 0" text="color: white; align: left; letterSpacing: 5; lineHeight: 55; 
+      value: Published by MIT Press;
+      baseline: top; width: 3; anchor: left; wrapCount: 55;">
+      </a-entity>
+      <a-entity position="0.86611 0 0" text="color: white; letterSpacing: 5; baseline: top; lineHeight: 55; 
+      value: By Jay David Bolter, Maria Engberg and Blair MacIntyre \n \n How augmented reality and virtual reality are taking their places in contemporary media culture alongside film and television.; 
+      width: 1.5; anchor: left; wrapCount: 32.5;">
+      </a-entity>
+ 
+</a-entity>
+
+
+<a-entity id="HubsPlatform" position="4.19107 2.1 -8.10904" rotation="0 -90 0">
+  <a-entity position="0 0.2 0" text="color: white; align: center; letterSpacing: 5; lineHeight: 55; 
+  value: The Hubs Platform; 
+  baseline: top; width: 3; anchor: left; wrapCount: 55;">
+  </a-entity>
+  <a-entity  text="color: white; letterSpacing: 5; baseline: top; lineHeight: 55; 
+  value: Realitymedia is built on A-Frame. \nAn extensive guide to using A-Frame is available in the documentation. \n\n
+  To navigate in the galleries :\n\n  - On desktop use your WASD or arrow keys to move around. You can also press your right mouse button to teleport to a different location. Rotate your view using the Q and E keys, or hold down your left mouse button and drag. ; 
+  width: 3; anchor: left; wrapCount: 65;">
+  </a-entity>
+</a-entity>
+
+<a-entity id="HubsPlatform2" position="4.19107 2.1 -4.428" rotation="0 -90 0">
+  <a-entity position="0 0.270 0" text="color: white; letterSpacing: 5; baseline: top; lineHeight: 55; 
+  value: -For Quest VR devices,; 
+  width: 3; anchor: left; wrapCount: 65;">
+  </a-entity>
+  <a-image src="assets/Onboarding/controllers.jpg" height="2" material="" geometry="height: 1.5; width: 3" position="1.50672 -0.63049 0"> 
+  </a-image>
+</a-entity>
+
+<a-entity id="Sharing" position="4.19107 2.1 -13.3" rotation="0 -90 0">
+  <a-entity position="0 0.2 0" text="color: white; align: center; letterSpacing: 5; lineHeight: 55; 
+  value: Visit the exhibit with friends; 
+  baseline: top; width: 3; anchor: left; wrapCount: 55;">
+  </a-entity>
+  <a-entity  text="color: white; letterSpacing: 5; baseline: top; lineHeight: 55; 
+  value:  Sharing the URL of the room you are currently in will allow others to join your experience.;
+  width: 3; anchor: left; wrapCount: 65;">
+  </a-entity>
+</a-entity>
+
+<a-entity id="Portal_Text"  position="-0.42477 2.539 -14.194" rotation="0 0 0">
+  <a-entity position="0 0.2 0" text="color: white; align: center; letterSpacing: 5; lineHeight: 55; 
+  value: Enter here; 
+  baseline: top; width: 3; anchor: center; wrapCount: 55;">
+  </a-entity>
+</a-entity>
+
+  <a-plane
+    src="#portal_temp"
+    position="-0.39433 1.4955 -14.19439"
+    height="1.5"
+    width="1.5"
+    rotation=""
+    material=""
+    geometry=""
+    scale="1.42 2.01 1.42"
+  ></a-plane>
+
+      <!--Rotunda -->
+      <!-- <a-video
+        src="https://streamable.com/knhfra"
+        width="4"
+        height="3"
+        position="49.70848 2.85295 -6.7798"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-67.83361928112843 119.72010425038066 0.002864788975654116"
+      ></a-video> -->
+      <a-plane src="#portal_temp" position="55.03702 3.39954 -8.59403" height="1.5" width="1.5" rotation="0 -90 0" material="" geometry="height: 2" scale="1.42 2.01 1.42"></a-plane>
+
+      <a-entity
+        text="value: What are Reality Media"
+        position="51.26906 5.68128 -0.10998"
+        scale="5 5 3"
+        rotation="0 -135.19 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_01"
+        position="52.24816 7.30385 -1.1335"
+        height="1.5"
+        width="1.5"
+        rotation="0 -135.11 0"
+        material=""
+        geometry=""
+        scale="2.06 1.49 1.7"
+      ></a-plane>
+      <a-plane src="#portal_temp" position="52.34709 3.27412 -0.95715" height="1.5" width="1.5" rotation="0 -135.19 0" material="" geometry="height: 2" scale="1.42 2.01 1.42"></a-plane>
+
+      <a-entity
+        text="value: History of Reality Media"
+        position="43.70118 5.681 1.87193"
+        scale="5 5 3"
+        rotation="0 -179.82 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_02"
+        position="45.00667 7.304 1.763"
+        height="1.5"
+        width="1.5"
+        rotation="0 180.11597 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+      ></a-plane>
+
+      <a-entity
+        text="value: 3D Graphics, Sensing and Tracking"
+        position="37.07446 5.681 -1.51295"
+        scale="5 5 3"
+        rotation="0 -221.33 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_03"
+        position="37.72781 7.3185 -0.96857"
+        height="1.5"
+        width="1.5"
+        rotation="0 138.11261 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Presence and Aura"
+        position="35.22043 5.77896 -10.04976"
+        scale="5 5 5"
+        rotation="0 92.68910139169866 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_04"
+        position="35.24395 7.3185 -8.41931"
+        height="1.5"
+        width="1.5"
+        rotation="0 90.21965329468482 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-plane src="#portal_temp" position="35.06865 3.43079 -8.41931" rotation="0 92.68910139169866 0" height="1.5" width="1.5" material="" geometry="height: 2" scale="1.42 2.01 1.42"></a-plane>
+     
+      <a-entity
+        text="value: Genres of AR and VR"
+        position="38.8509 5.77896 -16.72246"
+        scale="5 5 5"
+        rotation="0 43.11564704138958 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_05"
+        position="37.71063 7.3185 -15.66791"
+        height="1.5"
+        width="1.5"
+        rotation="0 45.33127483516047 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Privacy and Public Spaces"
+        position="46.18268 5.779 -18.48227"
+        scale="5 5 5"
+        rotation="0 -1.633502673917977 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_06"
+        position="44.98239 7.3185 -18.52612"
+        height="1.5"
+        width="1.5"
+        rotation="0 -0.10255944532841735 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Future of AR and VR"
+        position="53.41052 5.69947 -14.69041"
+        scale="5 5 5"
+        rotation="0 -43.713242021711025 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_07"
+        position="52.31446 7.24449 -15.68288"
+        height="1.5"
+        width="1.5"
+        rotation="0 -43.996283172505656 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+  </a-scene>
+</div>
+
+<div class="w3-container" id="teaser">
+  <p>
+    The immersive galleries of RealityMedia are organized around a central rotunda. The rotunda contains an overview of each immersive gallery along with a portal to each gallery. The rotunda serves as an organizational hub and can be accessed from each of the immersive galleries.
+  </p>
+  <p>
+    Links to the 2D galleries of RealityMedia are listed below. These pages provide context for your visit as well as links into the corresponding 3D galleries (the portal symbol indicates a link into a 3D gallery).
+  </p>
+</div>
+
+  <!-- ####################   -->
+  <!-- ####### UI #########   -->
+  <!-- ####################   -->
+
+  
+  <a href="https://sites.gatech.edu/augmentedenvironments/" target="_blank">
+    <img src="assets/General/AEL_logo.png" class="AEL_Logo"></img>
+  </a>
+</div>
+  <script src="navigation.js"></script>
+</body>
+
+</html>
