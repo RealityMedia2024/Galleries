@@ -30,15 +30,16 @@ document.addEventListener('keydown', function (event) {
     }
   }
   // If the user is teleporting disable movement-controls in XR
-  const sceneEl = document.querySelector("a-scene");
-  sceneEl.addEventListener("enter-vr", function() {
-    if (movementType === 'teleport') {
-      // cameraRig.setAttribute('movement-controls', 'enabled', false);
-    }
-  });
-  sceneEl.addEventListener("exit-vr", function() {
-    cameraRig.setAttribute('movement-controls', 'enabled', true);
-  });
+  // const sceneEl = document.querySelector("a-scene");
+  // sceneEl.addEventListener("enter-vr", function() {
+  //   if (movementType === 'teleport') {
+  //     // cameraRig.setAttribute('movement-controls', 'enabled', false);
+  //   }
+  // });
+  // sceneEl.addEventListener("exit-vr", function() {
+  //   cameraRig.setAttribute('movement-controls', 'enabled', true);
+  // });
+
 /* global AFRAME */
 AFRAME.registerComponent('play-on-click', {
 init: function () {
@@ -69,16 +70,16 @@ var cursor = document.querySelector('a-cursor');
 /**
 * CINEMA MODE
 */
-scene.lightOff = function() {
-  scene.islightOn = true;
-  scene.removeAttribute('animation__fogback');
-  scene.setAttribute('animation__fog', "property: fog.color; to: #0c192a; dur: 800; easing: easeInQuad;");
-}
-scene.lightOn = function() {
-  scene.islightOn = false;
-  scene.removeAttribute('animation__fog');
-  scene.setAttribute('animation__fogback', "property: fog.color; to: #dbdedb; dur: 800");
-}
+// scene.lightOff = function() {
+//   scene.islightOn = true;
+//   scene.removeAttribute('animation__fogback');
+//   scene.setAttribute('animation__fog', "property: fog.color; to: #0c192a; dur: 800; easing: easeInQuad;");
+// }
+// scene.lightOn = function() {
+//   scene.islightOn = false;
+//   scene.removeAttribute('animation__fog');
+//   scene.setAttribute('animation__fogback', "property: fog.color; to: #dbdedb; dur: 800");
+// }
 // Play button action
 // document.querySelector('#control-play').addEventListener('click', function () {
 //   if (videoPlayer.paused) {
